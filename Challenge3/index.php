@@ -1,7 +1,11 @@
 <?php 
-echo "<h2> Simple Twitter API Test</h2>"; 
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
 
-require_once('TwitterAPIExchange.php');
+//require_once('TwitterAPIExchange.php');
+
+require ('autoloader.php');
+spl_autoload_register('Autoloader::loader');
 
 
  
@@ -20,11 +24,10 @@ $requestMethod = "GET";
 if (isset($_GET['user']))  {$user = $_GET['user'];}  else {$user  = "iagdotme";}
 if (isset($_GET['count'])) {$user = $_GET['count'];} else {$count = 20;}
 $getfield = "?screen_name=$user&count=$count";
-$twitter = new TwitterAPIExchange($settings);
-$string = json_decode($twitter->setGetfield($getfield)
-->buildOauth($url, $requestMethod)
-->performRequest(),$assoc = TRUE);
-if($string["errors"][0]["message"] != "") {echo "<h3>Sorry, there was a problem.</h3><p>Twitter returned the following error message:</p><p><em>".$string[errors][0]["message"]."</em></p>";exit();}
+$twitter = new Classes\Twitter\TwitterAPIExchange($settings);
+$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+//$string =\Classes\html\DisplayRecord::Dtable($string);
+//if($string["errors"][0]["message"] != "") {echo "<h3>Sorry, there was a problem.</h3><p>Twitter returned the following error message:</p><p><em>".$string[errors][0]["message"]."</em></p>";exit();}
 foreach($string as $items)
     {
         echo "Time and Date of Tweet: ".$items['created_at']."<br />";
@@ -35,7 +38,6 @@ foreach($string as $items)
         echo "Friends: ". $items['user']['friends_count']."<br />";
         echo "Listed: ". $items['user']['listed_count']."<br /><hr />";
     }
-
 ?>
 
 
