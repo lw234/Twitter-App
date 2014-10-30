@@ -34,29 +34,26 @@ class DisplayRecord {
 
 		}
 			
-	public static function print_Followers($string){ 
+	public static function printPost($string){ 
 				
-		$table .= "<h1>List of Followers</h1>";
-		$table .= "<table border = 2>";
-		$table .= "
-				<tr>
-					<th>Screen name</th>
-					<th>Name</th>		
-				</tr>
+		//$table .= "<h1>Tweet Post</h1>";
+		//$table .= "<table border = 2>";
+		//$table .= "
+			//	<tr>
+				//	<th>Message</th>
+		
+			//	</tr>
 			
-			";
+			//";
 				
-			foreach($string as $items)
+			if (!empty($string))
     		{
-    			$table .="<tr>";
-				$table .= "<td>". $items['user']['screen_name']. "</td>";
-				$table .= "<td>". $items['user']['name']. "</td>";
-				$table .="</tr>";
-		   }
+    			echo '<h3>Status Update</h3>';
+			}
 						
 			
-			$table .= "</table>";
-			echo $table;
+			//$table .= "</table>";
+			//echo $table;
 
 		}		
 			
