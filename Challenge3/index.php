@@ -1,68 +1,97 @@
 <?php 
-ini_set('display_errors', 'On');
-error_reporting(E_ALL | E_STRICT);
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL | E_STRICT);
+require_once ('autoloader.php');
 
-//require_once('TwitterAPIExchange.php');
-
-
-require 'DisplayRecord.php';
-require ('autoloader.php');
-spl_autoload_register('Autoloader::loader');
-
-
- 
 /** Set access tokens here - see: https://dev.twitter.com/apps/ **/
-
-$url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
-//$url= "https://api.twitter.com/1.1/statuses/home_timeline.json";
-
-$requestMethod = "GET"; 
-//if (isset($_GET['user']))  {$user = $_GET['user'];}  else {$user  = "iagdotme";} 
-//if (isset($_GET['count'])) {$user = $_GET['count'];} else {$count = 20;}
-$getfield = "?screen_name=iagdotme&count=20";
-
-//$url = "https://api.twitter.com/1.1/followers/list.json";
-//$requestMethod = "GET"; 
-//$getfield = "?screen_name=$user&count=$count";
-
-
-$twitter = new \Classes\Twitter\TwitterAPIExchange($settings);
-$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
-$Tuser = DisplayRecord::print_user_timeline($string);
-
-$url= "https://api.twitter.com/1.1/statuses/home_timeline.json";
-$requiresMethod = "GET";
-$getfield = "?screen_name=iagdotme&count=20";
-$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
-$UserF = DisplayRecord::print_user_timeline($string);
-
-//$url="https://api.twitter.com/1.1/followers/ids.json";
-//$requiresMethod = "GET";
-//$getfield = "?screen_name=kunpooka&count=20";
-//$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
-//$UserF = DisplayRecord::print_home_timeline($string); 
-
-$url="https://api.twitter.com/1.1/statuses/update.json";
-$requestMethod = "POST"; 
-
-//POST fields required by the URL above. See relevant docs as above 
-$postfields = array(
-    
-    'status' => 'Using TwitterAPI to tweet!!'
+$settings = array(
+    'oauth_access_token' => "64633572-ycVxT6jZJzbTuKvrvULwqy9OTzcNPKupkloVPZBqB",
+    'oauth_access_token_secret' => "XclsXhu9guxXpPb7bUeRahTrZNA56Bi06mUnm5Br9kTc6",
+    'consumer_key' => "r4TTjzxoLI6bOrx0WyB4AzUqk",
+    'consumer_secret' => "h0VUg2P19jpe3np4hu9Yy7gdQ2dBzMud2jRisYcSruNQkqu8jv"
     );
-$twitter = new \Classes\Twitter\TwitterAPIExchange($settings);
-$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
-$UserF = DisplayRecord::printPost($string);
-/**
-echo $twitter->buildOauth($url, $requestMethod)
-             ->setPostfields($postfields)
-             ->performRequest();
-  **/   
-//$string = json_decode($twitter->setPostfields($postfields)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
-
-//$UserF = DisplayRecord::print_home_timeline($string); 
-
- 
 ?>
 
+<html lang = "en">
+	<head>
+		<title>Twitter API</title>
+		<meta charset="utf-8"/>
+		<link rel="stylesheet" href="index.css">
+	</head>
+<h1 align="center"> Twitter Records</h1>
 
+
+<ul id="accordion">
+    <li>
+        <h2>Statuses Update</h2>
+        <div class="content">
+           <?php
+        	$url="https://api.twitter.com/1.1/statuses/update.json";
+			$requestMethod = "POST"; 
+
+		//POST fields required by the URL above. See relevant docs as above 
+			$postfields = array(
+    
+   				 'status' => 'Using TwitterAPI to tweet!!'
+   			 );
+			$twitter = new\Classes\Twitter\TwitterAPIExchange($settings);
+			$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+			\Classes\HTML\DisplayRecord::printPost($string);
+        	
+           ?> 
+        </div>
+    </li>
+    <li>
+        <h2>User Timeline</h2>
+        <div class="content">
+            <?php
+        	$url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+			$requestMethod = "GET"; 
+			$getfield = "?screen_name=kunpooka&count=20";
+			$twitter = new \Classes\Twitter\TwitterAPIExchange($settings);
+			$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+			\Classes\HTML\DisplayRecord::print_user_timeline($string);
+           ?>
+        </div>
+    </li>
+    <li>
+        <h2>User Home Timeline</h2>
+        <div class="content">
+            <?php
+        	$url= "https://api.twitter.com/1.1/statuses/home_timeline.json";
+			$requiresMethod = "GET";
+			$getfield = "?screen_name=kunpooka&count=20";
+			$strings = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+			\Classes\HTML\DisplayRecord::print_user_timeline($strings);
+        	
+           ?> 
+        </div>
+    </li>
+    <li>
+        <h2>Follower</h2>
+        <div class="content">
+        	<?php
+            $url = "https://api.twitter.com/1.1/followers/list.json";
+			$requestMethod = "GET";
+			$getfield = "?screen_name=kunpooka";
+			$twitter = new \Classes\Twitter\TwitterAPIExchange($settings);
+			$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+			\Classes\HTML\DisplayRecord::printFollowerslist($string);
+			?>
+        </div>
+    </li>
+    <li>
+        <h2>Friends List</h2>
+        <div class="content">
+           <?php
+            $url= "https://api.twitter.com/1.1/friends/list.json";
+			$requestMethod = "GET";
+			$getfield = "?screen_name=kunpooka";
+			$twitter = new \Classes\Twitter\TwitterAPIExchange($settings);
+			$string = json_decode($twitter->setGetfield($getfield)->buildOauth($url, $requestMethod)->performRequest(),$assoc = TRUE);
+			\Classes\HTML\DisplayRecord::printFollowerslist($string);
+			?>
+        </div>
+    </li>
+</ul>
+</html>
